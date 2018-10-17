@@ -53,9 +53,16 @@ open class ROGoogleTranslate {
         }
         
         if let urlEncodedText = params.text.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
-            if let url = URL(string: "https://translation.googleapis.com/language/translate/v2?key=\(self.apiKey)&q=\(urlEncodedText)&source=\(params.source)&target=\(params.target)&format=text") {
+ 
+            if let url = URL(string: "https://translation.googleapis.com/language/translate/v2?key=\(self.apiKey)&q=\(urlEncodedText)&source=\(params.source)&target=\(params.target)&format=text&") 
+            {    
+                // Creaste URL Request
+                let request = NSMutableURLRequest(url:url)
+                request.addValue(Bundle.main.bundleIdentifier ?? "", forHTTPHeaderField: "X-Ios-Bundle-Identifier")
             
-                let httprequest = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+                    
+                let task = URLSession.shared.dataTask( with: request as URLRequest, completionHandler: { (data, response, error) in
+
                     guard error == nil else {
                         print("Something went wrong: \(error?.localizedDescription)")
                         return
